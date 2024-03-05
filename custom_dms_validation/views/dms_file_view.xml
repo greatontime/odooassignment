@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="dms_file_form_view_inherit" model="ir.ui.view">
+        <field name="name">DMS File form view inherit</field>
+        <field name="model">dms.file</field>
+        <field name="inherit_id" ref="dms.view_dms_file_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                    <field name="state" widget="statusbar" nolabel="1"/>
+                </header>
+            </xpath>
+            <xpath expr="//button[@name='lock']" position="after">
+                <button name="action_state_submit" string="Submit" type="object" attrs="{'invisible':[('state','not in',['draft','submit'])]}"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="dms_file_tree_view_inherit" model="ir.ui.view">
+        <field name="name">DMS File tree view inherit</field>
+        <field name="model">dms.file</field>
+        <field name="inherit_id" ref="dms.view_dms_file_tree" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="state" widget="badge"
+					decoration-success="state == 'approved'"
+					decoration-danger="state in ['refuse']"
+					decoration-warning="state == 'under_approval'"
+					decoration-info="state == 'submit'"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="dms_file_search_view_inherit" model="ir.ui.view">
+        <field name="name">DMS File Search View Inherit</field>
+        <field name="model">dms.file</field>
+        <field name="inherit_id" ref="dms.search_dms_file" />
+        <field name="arch" type="xml">
+            <filter name="filter_write" position="after">
+                <separator />
+                <filter
+                    name="needs_review"
+                    string="Needs my Review"
+                    domain="[('reviewer_ids','in',uid), ('state', 'not in', ['approve', 'post', 'done', 'cancel'])]"
+                    help="My Expense report to review"
+                />
+                <filter
+                    name="tier_validated"
+                    string="Validated"
+                    domain="[('validated', '=', True)]"
+                    help="Expense report validated and ready to be approved"
+                />
+            </filter>
+        </field>
+    </record>
+</odoo>
