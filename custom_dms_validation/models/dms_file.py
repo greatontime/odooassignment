@@ -25,12 +25,22 @@ class DMSFile(models.Model):
 
     def action_state_submit(self):
         for rec in self:
-            if rec.state in ["draft","submit"]:
+            if rec.state in ["draft","submit"] and not rec.directory_id.need_validation:
+                rec.write({
+                    "state":"submit"
+                })
+            elif rec.state in ["draft","submit"] and rec.directory_id.need_validation:
                 rec.write({
                     "state":"under_approval"
                 })
-                if rec.directory_id.id == 1:
-                    rec.request_validation()
+                rec.request_validation()
+
+    def action_state_approved(self):
+        for rec in self:
+            if rec.state in ["draft","submit"] and not rec.directory_id.need_validation:
+                rec.write({
+                    "state":"approved"
+                })
 
 
     def reject_tier(self):

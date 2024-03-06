@@ -12,6 +12,7 @@
             </xpath>
             <xpath expr="//button[@name='lock']" position="after">
                 <button name="action_state_submit" string="Submit" type="object" attrs="{'invisible':[('state','not in',['draft','submit'])]}"/>
+                <button name="action_state_approved" string="Approve" type="object" attrs="{'invisible':[('state','in',['draft','under_approval','approved'])]}"/>
             </xpath>
         </field>
     </record>
