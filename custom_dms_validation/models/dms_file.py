@@ -13,6 +13,8 @@ class DMSFile(models.Model):
     _check_company_auto = True
     _tier_validation_manual_config = False
 
+    need_validation = fields.Boolean(string="Need Validation",compute="_compute_need_validation")
+
     state = fields.Selection([
         ('draft', 'Draft'),
         ('submit', 'Submitted'),
@@ -27,7 +29,7 @@ class DMSFile(models.Model):
                 rec.write({
                     "state":"under_approval"
                 })
-                if rec.directory_id.id == 6:
+                if rec.directory_id.id == 1:
                     rec.request_validation()
 
 
