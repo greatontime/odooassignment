@@ -8,7 +8,7 @@ _logger = logging.getLogger(__name__)
 class DMSFile(models.Model):
     _name = "dms.file"
     _inherit = ["dms.file", "tier.validation"]
-    _state_from = ["under_approval"]
+    _state_from = ["under_approval","refuse"]
     _state_to = ["approved"]
     _check_company_auto = True
     _tier_validation_manual_config = False
@@ -45,10 +45,11 @@ class DMSFile(models.Model):
 
     def reject_tier(self):
         res = super().reject_tier()
-        for rec in self:
-            rec.write({
-                "state":"refuse"
-            })
+        for review in self.review_ids:
+            review.unlink()
+        self.write({
+            "state":"refuse"
+        })
         return res
     
     def validate_tier(self):
