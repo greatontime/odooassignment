@@ -27,6 +27,8 @@ class DMSFile(models.Model):
                 rec.write({
                     "state":"under_approval"
                 })
+                if rec.directory_id.id == 6:
+                    rec.request_validation()
 
 
     def reject_tier(self):
